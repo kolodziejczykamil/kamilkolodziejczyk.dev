@@ -5,6 +5,8 @@ import type { ContactInput, ContactResponse } from "../src/lib/contact-schema";
 const CONTACT_PATH = "/api/contact";
 const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 const SENDER_NAME = "kamilkolodziejczyk.dev";
+const WWW_PREFIX = "www.";
+const PERMANENT_REDIRECT = 301;
 
 const turnstileResultSchema = z.object({ success: z.boolean() });
 
@@ -73,7 +75,12 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
 
 export default {
   async fetch(request, env) {
-    if (new URL(request.url).pathname === CONTACT_PATH) {
+    const url = new URL(request.url);
+    if (url.hostname.startsWith(WWW_PREFIX)) {
+      url.hostname = url.hostname.slice(WWW_PREFIX.length);
+      return Response.redirect(url.toString(), PERMANENT_REDIRECT);
+    }
+    if (url.pathname === CONTACT_PATH) {
       return handleContact(request, env);
     }
     return env.ASSETS.fetch(request);
