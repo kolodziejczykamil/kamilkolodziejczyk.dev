@@ -1,4 +1,5 @@
 import type { SimpleIcon } from "simple-icons";
+import { brandColors } from "@/content/brand";
 import {
   siAntdesign,
   siChartdotjs,
@@ -30,6 +31,8 @@ import {
 export const SITE_URL = "https://kamilkolodziejczyk.dev";
 export const EMAIL = "kontakt@kamilkolodziejczyk.dev";
 export const LINKEDIN_URL = "https://www.linkedin.com/in/kamil-kolodziejczyk";
+export const GITHUB_URL = "https://github.com/kolodziejczykamil";
+export const SOURCE_URL = `${GITHUB_URL}/kamilkolodziejczyk.dev`;
 
 export type Period = {
   from: number;
@@ -81,14 +84,18 @@ export type NavItem = {
 
 export const person = {
   name: "Kamil Kołodziejczyk",
+  alternateName: "Kamil Kolodziejczyk",
   role: "Senior Frontend Developer",
+  country: "PL",
 };
 
 export const siteMeta = {
-  title: `${person.name}, ${person.role}`,
+  title: `${person.name} – ${person.role}, React and TypeScript`,
+  shortTitle: person.name,
   description:
     "Senior Frontend Developer with 8+ years in fintech, banking and logistics. React, TypeScript and Next.js, from legacy rewrites to mobile-first apps.",
-  themeColor: "#07130f",
+  themeColor: brandColors.ink,
+  ogImageAlt: `${person.name}, ${person.role}. I rebuild legacy frontends as fast, mobile-first React apps.`,
 };
 
 export const hero = {
@@ -323,6 +330,8 @@ export const contact = {
     sendAnotherLabel: "Send another message",
     genericError: `Something went wrong. Please try again or email me at ${EMAIL}.`,
     verificationError: "Please complete the verification and try again.",
+    rateLimitedError: `Too many messages right now. Please try again later or email me at ${EMAIL}.`,
+    honeypotLabel: "Leave this field empty",
   },
 };
 
@@ -335,6 +344,7 @@ export const navItems: readonly NavItem[] = [
 
 export const footer = {
   builtWith: "Built with Next.js and TypeScript.",
+  sourceLabel: "Source on GitHub",
 };
 
 export const commands: readonly Command[] = [

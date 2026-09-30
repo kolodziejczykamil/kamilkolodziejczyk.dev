@@ -3,7 +3,7 @@ import "@fontsource-variable/bricolage-grotesque";
 import "@fontsource/ibm-plex-sans/400.css";
 import "@fontsource/ibm-plex-sans/500.css";
 import "./globals.css";
-import { SITE_URL, siteMeta } from "@/content/profile";
+import { person, SITE_URL, siteMeta } from "@/content/profile";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -14,14 +14,16 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "profile",
+    firstName: person.name.split(" ")[0],
+    lastName: person.name.split(" ")[1],
     locale: "en_US",
     url: "/",
-    siteName: siteMeta.title,
+    siteName: siteMeta.shortTitle,
     title: siteMeta.title,
     description: siteMeta.description,
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: siteMeta.title,
     description: siteMeta.description,
   },

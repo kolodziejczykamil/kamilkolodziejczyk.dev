@@ -33,11 +33,13 @@ export function Hero() {
             <h1 id="hero-title" className="mt-5 text-hero">
               {words.map((word, index) => (
                 <span key={`${word}-${index}`}>
-                  <span
-                    className="hero-word"
-                    style={{ "--word-delay": `${HEADLINE_START_MS + index * WORD_STEP_MS}ms` }}
-                  >
-                    {word}
+                  <span className="-mb-[0.14em] inline-block overflow-hidden pb-[0.14em] align-bottom">
+                    <span
+                      className="hero-word"
+                      style={{ "--word-delay": `${HEADLINE_START_MS + index * WORD_STEP_MS}ms` }}
+                    >
+                      {word}
+                    </span>
                   </span>{" "}
                 </span>
               ))}

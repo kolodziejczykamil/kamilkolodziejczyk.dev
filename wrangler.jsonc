@@ -16,8 +16,17 @@
     "run_worker_first": true
   },
   "send_email": [{ "name": "CONTACT_EMAIL" }],
+  "kv_namespaces": [{ "binding": "CONTACT_LIMITS", "id": "a8c1bbe1a0164578874b6d67dda6b0d4" }],
+  "ratelimits": [
+    {
+      "name": "CONTACT_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 3, "period": 60 }
+    }
+  ],
   "vars": {
-    "CONTACT_FROM": "formularz@kamilkolodziejczyk.dev"
+    "CONTACT_FROM": "formularz@kamilkolodziejczyk.dev",
+    "CONTACT_DAILY_LIMIT": "20"
   },
   "observability": {
     "enabled": true

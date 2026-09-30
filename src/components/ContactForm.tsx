@@ -6,8 +6,8 @@ import { z } from "zod";
 import type { FormEvent } from "react";
 import { FormField } from "@/components/FormField";
 import { contact } from "@/content/profile";
-import { contactResponseSchema, contactSchema } from "@/lib/contact-schema";
-import type { ContactField } from "@/lib/contact-schema";
+import { contactResponseSchema, contactSchema, HONEYPOT_FIELD, TURNSTILE_ACTION } from "@/lib/contact-schema";
+import type { ContactField, ContactResponse } from "@/lib/contact-schema";
 import { TURNSTILE_SITE_KEY } from "@/lib/turnstile-site-key";
 
 const TURNSTILE_SCRIPT_URL = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
@@ -23,6 +23,13 @@ type FormStatus =
   | { kind: "error"; message: string };
 
 const { form: copy } = contact;
+
+const errorMessages: Record<Exclude<ContactResponse, { ok: true }>["error"], string> = {
+  validation: copy.genericError,
+  verification: copy.verificationError,
+  rate_limited: copy.rateLimitedError,
+  server: copy.genericError,
+};
 
 function readField(formData: FormData, name: string): string {
   const value = formData.get(name);
@@ -42,6 +49,7 @@ export function ContactForm() {
     }
     widgetIdRef.current = window.turnstile.render(container, {
       sitekey: TURNSTILE_SITE_KEY,
+      action: TURNSTILE_ACTION,
       theme: "dark",
       appearance: "interaction-only",
       "response-field-name": TURNSTILE_RESPONSE_FIELD,
@@ -76,6 +84,7 @@ export function ContactForm() {
       name: readField(formData, "name"),
       email: readField(formData, "email"),
       message: readField(formData, "message"),
+      [HONEYPOT_FIELD]: readField(formData, HONEYPOT_FIELD),
       turnstileToken: readField(formData, TURNSTILE_RESPONSE_FIELD),
     });
 
@@ -100,10 +109,7 @@ export function ContactForm() {
         setStatus({ kind: "success" });
         return;
       }
-      setStatus({
-        kind: "error",
-        message: result.error === "verification" ? copy.verificationError : copy.genericError,
-      });
+      setStatus({ kind: "error", message: errorMessages[result.error] });
     } catch {
       setStatus({ kind: "error", message: copy.genericError });
     }
@@ -142,7 +148,7 @@ export function ContactForm() {
   return (
     <>
       <Script src={TURNSTILE_SCRIPT_URL} strategy="lazyOnload" onReady={renderTurnstile} />
-      <form noValidate onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2">
+      <form noValidate onSubmit={onSubmit} className="relative grid gap-5 sm:grid-cols-2">
         <FormField
           name="name"
           label={copy.nameLabel}
@@ -166,6 +172,12 @@ export function ContactForm() {
           error={fieldErrors.message}
           className="sm:col-span-2"
         />
+        <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+          <label>
+            {copy.honeypotLabel}
+            <input type="text" name={HONEYPOT_FIELD} tabIndex={-1} autoComplete="off" />
+          </label>
+        </div>
         <div ref={turnstileContainerRef} className="empty:hidden sm:col-span-2" />
         <div className="flex flex-wrap items-center gap-4 sm:col-span-2">
           <button

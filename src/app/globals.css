@@ -180,8 +180,7 @@
 
     .hero-word {
       display: inline-block;
-      opacity: 0;
-      transform: translateY(0.4em);
+      transform: translateY(110%);
       animation: rise 700ms var(--ease-out-expo) var(--word-delay, 0ms) forwards;
     }
 

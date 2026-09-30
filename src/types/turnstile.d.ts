@@ -1,5 +1,6 @@
 type TurnstileRenderOptions = {
   sitekey: string;
+  action?: string;
   theme?: "light" | "dark" | "auto";
   appearance?: "always" | "execute" | "interaction-only";
   "response-field-name"?: string;
