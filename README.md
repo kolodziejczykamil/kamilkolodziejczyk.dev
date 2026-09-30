@@ -53,6 +53,8 @@ Set secrets with `npx wrangler secret put <NAME>`. After changing `wrangler.json
 
 ## Deploy
 
+Every push to `main` is built and deployed by Cloudflare Workers Builds. To deploy manually from a local machine:
+
 ```bash
 npm run deploy
 ```
