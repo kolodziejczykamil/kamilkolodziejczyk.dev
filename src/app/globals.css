@@ -2,12 +2,14 @@
 
 @theme {
   --color-*: initial;
-  --color-ink: #0f2431;
-  --color-ink-raised: #15303f;
-  --color-line: #264a5c;
-  --color-paper: #e6eef1;
-  --color-muted: #93aab5;
-  --color-signal: #f0b350;
+  --color-ink: #07130f;
+  --color-ink-raised: #0d1f18;
+  --color-line: #1d362c;
+  --color-line-strong: #2c4d40;
+  --color-paper: #e5f2ec;
+  --color-muted: #86a397;
+  --color-signal: #3ee8a5;
+  --color-danger: #ff8a7a;
 
   --font-*: initial;
   --font-display: "Bricolage Grotesque Variable", ui-sans-serif, system-ui, sans-serif;
@@ -17,8 +19,8 @@
   --text-body--line-height: 1.65;
   --text-hero: clamp(2.5rem, 6vw, 4.5rem);
   --text-hero--line-height: 1.02;
-  --text-email: clamp(1.125rem, 6cqi, 3rem);
-  --text-email--line-height: 1.2;
+  --text-stat: clamp(2.25rem, 5vw, 3.25rem);
+  --text-stat--line-height: 1;
 
   --container-page: 72rem;
   --container-measure: 62ch;
@@ -27,6 +29,7 @@
   --spacing-period: 10rem;
 
   --blueprint-cell: 32px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @layer base {
@@ -73,12 +76,57 @@
 }
 
 @utility blueprint-grid {
-  --grid-stroke: color-mix(in oklab, var(--color-line) 45%, transparent);
+  --grid-stroke: color-mix(in oklab, var(--color-line) 70%, transparent);
   background-image:
     linear-gradient(to right, var(--grid-stroke) 1px, transparent 1px),
     linear-gradient(to bottom, var(--grid-stroke) 1px, transparent 1px);
   background-size: var(--blueprint-cell) var(--blueprint-cell);
   mask-image: radial-gradient(ellipse 80% 70% at 65% 45%, black 25%, transparent 80%);
+}
+
+@utility blueprint-glow {
+  --grid-stroke: color-mix(in oklab, var(--color-signal) 45%, transparent);
+  background-image:
+    radial-gradient(
+      circle 22rem at var(--pointer-x, 70%) var(--pointer-y, 40%),
+      color-mix(in oklab, var(--color-signal) 9%, transparent),
+      transparent 70%
+    ),
+    linear-gradient(to right, var(--grid-stroke) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-stroke) 1px, transparent 1px);
+  background-size:
+    100% 100%,
+    var(--blueprint-cell) var(--blueprint-cell),
+    var(--blueprint-cell) var(--blueprint-cell);
+  mask-image: radial-gradient(
+    circle 14rem at var(--pointer-x, 70%) var(--pointer-y, 40%),
+    black,
+    transparent 75%
+  );
+}
+
+@utility spotlight {
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    background: radial-gradient(
+      circle 26rem at var(--pointer-x, 50%) var(--pointer-y, 50%),
+      color-mix(in oklab, var(--color-signal) 8%, transparent),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  &:hover::before {
+    opacity: 1;
+  }
 }
 
 @utility bullet-dash {
@@ -108,6 +156,73 @@
       opacity: 0;
       animation: diagram-reveal 500ms ease-out var(--diagram-delay, 0ms) forwards;
     }
+
+    .diagram-pulse {
+      stroke-dasharray: 0.22 1;
+      stroke-dashoffset: 0.22;
+      opacity: 0;
+      animation: diagram-pulse 2800ms ease-in-out var(--diagram-delay, 0ms) infinite;
+    }
+
+    .diagram-glow-start,
+    .diagram-glow-end {
+      opacity: 0;
+      animation: 2800ms ease-in-out var(--diagram-delay, 0ms) infinite;
+    }
+
+    .diagram-glow-start {
+      animation-name: diagram-glow-start;
+    }
+
+    .diagram-glow-end {
+      animation-name: diagram-glow-end;
+    }
+
+    .hero-word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(0.4em);
+      animation: rise 700ms var(--ease-out-expo) var(--word-delay, 0ms) forwards;
+    }
+
+    .hero-rise {
+      opacity: 0;
+      transform: translateY(1rem);
+      animation: rise 800ms var(--ease-out-expo) var(--rise-delay, 0ms) forwards;
+    }
+
+    @supports (animation-timeline: view()) {
+      .reveal {
+        animation: rise linear both;
+        animation-timeline: view();
+        animation-range: entry 5% entry 45%;
+        opacity: 0;
+        transform: translateY(2rem);
+      }
+    }
+  }
+
+  .diagram-accent {
+    transition: filter 400ms ease;
+  }
+
+  .hero-diagram:hover .diagram-accent {
+    filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-signal) 70%, transparent));
+  }
+
+  .command-palette::backdrop {
+    background-color: color-mix(in oklab, var(--color-ink) 70%, transparent);
+    backdrop-filter: blur(4px);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .command-palette[open] {
+      animation: palette-in 220ms var(--ease-out-expo);
+    }
+
+    .command-palette[open]::backdrop {
+      animation: diagram-reveal 220ms ease-out;
+    }
   }
 }
 
@@ -118,7 +233,83 @@
 }
 
 @keyframes diagram-reveal {
+  from {
+    opacity: 0;
+  }
+
   to {
     opacity: 1;
+  }
+}
+
+@keyframes diagram-pulse {
+  0% {
+    stroke-dashoffset: 0.22;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  55% {
+    stroke-dashoffset: -1;
+    opacity: 1;
+  }
+
+  60%,
+  100% {
+    stroke-dashoffset: -1;
+    opacity: 0;
+  }
+}
+
+@keyframes diagram-glow-start {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 0.16;
+  }
+
+  25% {
+    opacity: 0;
+  }
+}
+
+@keyframes diagram-glow-end {
+  0%,
+  45%,
+  100% {
+    opacity: 0;
+  }
+
+  58% {
+    opacity: 0.18;
+  }
+
+  80% {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    transform: translateY(-0.5rem) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
   }
 }

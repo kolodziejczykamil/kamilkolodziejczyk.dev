@@ -1,4 +1,6 @@
+import { CommandPalette } from "@/components/CommandPalette";
 import { Container } from "@/components/Container";
+import { NavLinks } from "@/components/NavLinks";
 import { mainNavLabel, navItems, person } from "@/content/profile";
 
 export function SiteHeader() {
@@ -8,17 +10,12 @@ export function SiteHeader() {
         <a href="#top" className="font-display text-lg font-semibold tracking-tight">
           {person.name}
         </a>
-        <nav aria-label={mainNavLabel}>
-          <ul className="flex items-center gap-7 text-[0.9375rem]">
-            {navItems.map((item) => (
-              <li key={item.href} className={item.showOnMobile ? "" : "hidden sm:block"}>
-                <a href={item.href} className="text-muted transition-colors hover:text-paper">
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <div className="flex items-center gap-6">
+          <nav aria-label={mainNavLabel}>
+            <NavLinks items={navItems} />
+          </nav>
+          <CommandPalette />
+        </div>
       </Container>
     </header>
   );

@@ -1,3 +1,32 @@
+import type { SimpleIcon } from "simple-icons";
+import {
+  siAntdesign,
+  siChartdotjs,
+  siCss,
+  siCypress,
+  siDocker,
+  siFigma,
+  siGit,
+  siGraphql,
+  siHtml5,
+  siJavascript,
+  siJest,
+  siMui,
+  siNextdotjs,
+  siReact,
+  siReactquery,
+  siRedux,
+  siSass,
+  siStorybook,
+  siStyledcomponents,
+  siTestinglibrary,
+  siTypescript,
+  siVite,
+  siWebpack,
+  siXstate,
+  siZod,
+} from "simple-icons";
+
 export const SITE_URL = "https://kamilkolodziejczyk.dev";
 export const EMAIL = "kontakt@kamilkolodziejczyk.dev";
 export const LINKEDIN_URL = "https://www.linkedin.com/in/kamil-kolodziejczyk";
@@ -22,10 +51,27 @@ export type CareerEntry = {
   focus: string;
 };
 
+export type Skill = {
+  label: string;
+  icon?: SimpleIcon;
+};
+
 export type SkillGroup = {
   name: string;
-  items: readonly string[];
+  items: readonly Skill[];
 };
+
+export type Stat = {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  label: string;
+};
+
+export type Command =
+  | { kind: "section"; label: string; href: string }
+  | { kind: "link"; label: string; href: string }
+  | { kind: "copy"; label: string; value: string; confirmation: string };
 
 export type NavItem = {
   label: string;
@@ -42,7 +88,7 @@ export const siteMeta = {
   title: `${person.name}, ${person.role}`,
   description:
     "Senior Frontend Developer with 8+ years in fintech, banking and logistics. React, TypeScript and Next.js, from legacy rewrites to mobile-first apps.",
-  themeColor: "#0f2431",
+  themeColor: "#07130f",
 };
 
 export const hero = {
@@ -50,7 +96,7 @@ export const hero = {
   headline: "I rebuild legacy frontends as fast, mobile-first React apps.",
   intro:
     "Senior Frontend Developer with 8+ years in fintech, banking and logistics. Right now I'm rewriting a payment provider's merchant panel, used by several thousand merchants every day.",
-  primaryAction: { label: "Email me", href: `mailto:${EMAIL}` },
+  primaryAction: { label: "Get in touch", href: "#contact" },
   secondaryAction: { label: "LinkedIn profile", href: LINKEDIN_URL },
   diagram: {
     title: "One merchant panel on desktop and mobile",
@@ -170,34 +216,88 @@ export const career = {
 const skillGroups: readonly SkillGroup[] = [
   {
     name: "Frontend",
-    items: ["React", "TypeScript", "JavaScript", "Next.js", "HTML", "CSS", "SCSS"],
+    items: [
+      { label: "React", icon: siReact },
+      { label: "TypeScript", icon: siTypescript },
+      { label: "JavaScript", icon: siJavascript },
+      { label: "Next.js", icon: siNextdotjs },
+      { label: "HTML", icon: siHtml5 },
+      { label: "CSS", icon: siCss },
+      { label: "SCSS", icon: siSass },
+    ],
   },
   {
     name: "State and data",
-    items: ["Redux Toolkit", "React Query", "XState", "Zod", "REST", "GraphQL", "WebSockets"],
+    items: [
+      { label: "Redux Toolkit", icon: siRedux },
+      { label: "React Query", icon: siReactquery },
+      { label: "XState", icon: siXstate },
+      { label: "Zod", icon: siZod },
+      { label: "GraphQL", icon: siGraphql },
+      { label: "REST" },
+      { label: "WebSockets" },
+    ],
   },
   {
     name: "UI",
-    items: ["Material UI", "Ant Design", "Styled Components", "Storybook", "Chart.js"],
+    items: [
+      { label: "Material UI", icon: siMui },
+      { label: "Ant Design", icon: siAntdesign },
+      { label: "Styled Components", icon: siStyledcomponents },
+      { label: "Storybook", icon: siStorybook },
+      { label: "Chart.js", icon: siChartdotjs },
+    ],
   },
   {
     name: "Testing",
-    items: ["Jest", "React Testing Library", "Cypress"],
+    items: [
+      { label: "Jest", icon: siJest },
+      { label: "React Testing Library", icon: siTestinglibrary },
+      { label: "Cypress", icon: siCypress },
+    ],
   },
   {
     name: "Tooling",
-    items: ["Vite", "Webpack", "Git", "Azure DevOps", "CI/CD", "Docker", "Figma"],
+    items: [
+      { label: "Vite", icon: siVite },
+      { label: "Webpack", icon: siWebpack },
+      { label: "Git", icon: siGit },
+      { label: "Docker", icon: siDocker },
+      { label: "Figma", icon: siFigma },
+      { label: "Azure DevOps" },
+      { label: "CI/CD" },
+    ],
   },
-  {
-    name: "Domains",
-    items: ["Fintech", "Banking", "Logistics", "E-commerce", "VoD", "IoT", "Public sector"],
-  },
+];
+
+const domains: readonly string[] = [
+  "Fintech",
+  "Banking",
+  "Logistics",
+  "E-commerce",
+  "VoD",
+  "IoT",
+  "Public sector",
 ];
 
 export const stack = {
   id: "stack",
   title: "Stack",
   groups: skillGroups,
+  domainsTitle: "Domains",
+  domains,
+};
+
+const statItems: readonly Stat[] = [
+  { value: 8, suffix: "+", label: "years of commercial frontend work" },
+  { value: domains.length, label: "industries, from banking to IoT" },
+  { value: 10, prefix: "~", label: "developers building on the architecture I set up" },
+  { value: 1000, suffix: "s", label: "merchants using my current project every day" },
+];
+
+export const stats = {
+  label: "At a glance",
+  items: statItems,
 };
 
 export const contact = {
@@ -205,9 +305,25 @@ export const contact = {
   title: "Contact",
   intro:
     "Have a frontend project or a senior role in mind? Write to me and I'll get back to you within a couple of days.",
+  directPrefix: "Prefer email? Write to",
   linkedInPrefix: "You can also find me on",
   linkedInLabel: "LinkedIn",
   cvNote: "My CV is available on request.",
+  form: {
+    nameLabel: "Name",
+    namePlaceholder: "Jane Doe",
+    emailLabel: "Email",
+    emailPlaceholder: "jane@company.com",
+    messageLabel: "Message",
+    messagePlaceholder: "A few words about the project or role",
+    submitLabel: "Send message",
+    submittingLabel: "Sending",
+    successTitle: "Message sent",
+    successBody: "Thanks for writing. I'll get back to you within a couple of days.",
+    sendAnotherLabel: "Send another message",
+    genericError: `Something went wrong. Please try again or email me at ${EMAIL}.`,
+    verificationError: "Please complete the verification and try again.",
+  },
 };
 
 export const navItems: readonly NavItem[] = [
@@ -219,6 +335,27 @@ export const navItems: readonly NavItem[] = [
 
 export const footer = {
   builtWith: "Built with Next.js and TypeScript.",
+};
+
+export const commands: readonly Command[] = [
+  { kind: "section", label: "Go to top", href: "#top" },
+  { kind: "section", label: `Go to ${about.title.toLowerCase()}`, href: `#${about.id}` },
+  { kind: "section", label: `Go to ${work.title.toLowerCase()}`, href: `#${work.id}` },
+  { kind: "section", label: `Go to ${career.title.toLowerCase()}`, href: `#${career.id}` },
+  { kind: "section", label: `Go to ${stack.title.toLowerCase()}`, href: `#${stack.id}` },
+  { kind: "section", label: `Go to ${contact.title.toLowerCase()}`, href: `#${contact.id}` },
+  { kind: "copy", label: "Copy email address", value: EMAIL, confirmation: "Email copied" },
+  { kind: "link", label: "Send an email", href: `mailto:${EMAIL}` },
+  { kind: "link", label: "Open LinkedIn profile", href: LINKEDIN_URL },
+];
+
+export const commandPalette = {
+  triggerLabel: "Open command menu",
+  dialogLabel: "Command menu",
+  searchLabel: "Search commands",
+  searchPlaceholder: "Type a command or search",
+  emptyLabel: "No matching commands",
+  closeLabel: "Close",
 };
 
 export const skipLinkLabel = "Skip to content";

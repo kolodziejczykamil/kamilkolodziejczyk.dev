@@ -9,13 +9,13 @@ export function Career() {
         {career.entries.map((entry) => (
           <li
             key={`${entry.period.from}-${entry.role}`}
-            className="grid gap-1 border-t border-line py-5 sm:grid-cols-[var(--spacing-period)_1fr] sm:gap-6"
+            className="reveal group grid gap-1 border-t border-line py-5 transition-colors sm:grid-cols-[var(--spacing-period)_1fr] sm:gap-6"
           >
             <p className="text-muted tabular-nums">
               <PeriodRange period={entry.period} />
             </p>
             <div>
-              <p className="font-medium">{entry.role}</p>
+              <p className="font-medium transition-colors duration-300 group-hover:text-signal">{entry.role}</p>
               <p className="text-muted">{entry.focus}</p>
             </div>
           </li>
