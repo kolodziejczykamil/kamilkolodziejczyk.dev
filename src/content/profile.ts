@@ -48,8 +48,16 @@ export type CaseStudy = {
   stack: readonly string[];
 };
 
+export type ProjectScreenshot = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
 export type SideProject = {
   title: string;
+  screenshot: ProjectScreenshot;
   summary: string;
   stack: readonly string[];
   demoUrl: string;
@@ -197,6 +205,12 @@ export const work = {
 const sideProjects: readonly SideProject[] = [
   {
     title: "React re-render lab",
+    screenshot: {
+      src: "/projects/re-render-lab.webp",
+      alt: "React re-render lab with a component editor, a scenario builder and a render timeline listing three renders",
+      width: 1280,
+      height: 800,
+    },
     summary:
       "Paste a React component, build a scenario of prop, state and parent changes, and see which renders it triggers. Static analysis spots inline functions, inline objects and missing memoization, then suggests fixes.",
     stack: ["Next.js", "TypeScript", "Tailwind CSS", "Vitest"],
@@ -205,6 +219,12 @@ const sideProjects: readonly SideProject[] = [
   },
   {
     title: "JSON to TypeScript",
+    screenshot: {
+      src: "/projects/json-to-typescript.webp",
+      alt: "JSON to TypeScript with a user profile JSON on the left and the generated TypeScript interfaces on the right",
+      width: 1280,
+      height: 800,
+    },
     summary: "Paste JSON and get TypeScript types for it instantly.",
     stack: ["Next.js", "TypeScript", "Tailwind CSS"],
     demoUrl: "https://json-to-typescript-sigma.vercel.app",
@@ -212,6 +232,12 @@ const sideProjects: readonly SideProject[] = [
   },
   {
     title: "File tree explorer",
+    screenshot: {
+      src: "/projects/file-tree-explorer.webp",
+      alt: "File tree explorer showing an expanded monorepo tree and search results for index",
+      width: 1280,
+      height: 800,
+    },
     summary:
       "Load a directory structure as JSON and browse it as a tree, with search, file and folder details, nested routes, dark mode and a Polish and English UI.",
     stack: ["React", "TypeScript", "Vite", "React Router", "Tailwind CSS"],
