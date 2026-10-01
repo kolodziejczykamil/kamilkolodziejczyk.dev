@@ -48,6 +48,14 @@ export type CaseStudy = {
   stack: readonly string[];
 };
 
+export type SideProject = {
+  title: string;
+  summary: string;
+  stack: readonly string[];
+  demoUrl: string;
+  sourceUrl: string;
+};
+
 export type CareerEntry = {
   period: Period;
   role: string;
@@ -184,6 +192,41 @@ export const work = {
   intro:
     "Client names stay private. The problems, the scale and my part in them are below.",
   caseStudies,
+};
+
+const sideProjects: readonly SideProject[] = [
+  {
+    title: "React re-render lab",
+    summary:
+      "Paste a React component, build a scenario of prop, state and parent changes, and see which renders it triggers. Static analysis spots inline functions, inline objects and missing memoization, then suggests fixes.",
+    stack: ["Next.js", "TypeScript", "Tailwind CSS", "Vitest"],
+    demoUrl: "https://re-render-lab.vercel.app",
+    sourceUrl: `${GITHUB_URL}/re-render-lab`,
+  },
+  {
+    title: "JSON to TypeScript",
+    summary: "Paste JSON and get TypeScript types for it instantly.",
+    stack: ["Next.js", "TypeScript", "Tailwind CSS"],
+    demoUrl: "https://json-to-typescript-sigma.vercel.app",
+    sourceUrl: `${GITHUB_URL}/json-to-typescript`,
+  },
+  {
+    title: "File tree explorer",
+    summary:
+      "Load a directory structure as JSON and browse it as a tree, with search, file and folder details, nested routes, dark mode and a Polish and English UI.",
+    stack: ["React", "TypeScript", "Vite", "React Router", "Tailwind CSS"],
+    demoUrl: "https://file-tree-explorer-omega.vercel.app",
+    sourceUrl: `${GITHUB_URL}/file-tree-explorer`,
+  },
+];
+
+export const projects = {
+  id: "projects",
+  title: "Side projects",
+  intro: "Small tools I build to explore ideas outside client work. Each one has a live demo and public code.",
+  demoLabel: "Live demo",
+  sourceLabel: "Source",
+  items: sideProjects,
 };
 
 const careerEntries: readonly CareerEntry[] = [
@@ -337,6 +380,7 @@ export const contact = {
 
 export const navItems: readonly NavItem[] = [
   { label: "Work", href: `#${work.id}`, showOnMobile: false },
+  { label: "Projects", href: `#${projects.id}`, showOnMobile: false },
   { label: "Career", href: `#${career.id}`, showOnMobile: false },
   { label: "Stack", href: `#${stack.id}`, showOnMobile: false },
   { label: "Contact", href: `#${contact.id}`, showOnMobile: true },
@@ -351,6 +395,7 @@ export const commands: readonly Command[] = [
   { kind: "section", label: "Go to top", href: "#top" },
   { kind: "section", label: `Go to ${about.title.toLowerCase()}`, href: `#${about.id}` },
   { kind: "section", label: `Go to ${work.title.toLowerCase()}`, href: `#${work.id}` },
+  { kind: "section", label: `Go to ${projects.title.toLowerCase()}`, href: `#${projects.id}` },
   { kind: "section", label: `Go to ${career.title.toLowerCase()}`, href: `#${career.id}` },
   { kind: "section", label: `Go to ${stack.title.toLowerCase()}`, href: `#${stack.id}` },
   { kind: "section", label: `Go to ${contact.title.toLowerCase()}`, href: `#${contact.id}` },

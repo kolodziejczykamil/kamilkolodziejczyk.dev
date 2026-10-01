@@ -3,6 +3,7 @@ import { Career } from "@/components/Career";
 import { Contact } from "@/components/Contact";
 import { Hero } from "@/components/Hero";
 import { SelectedWork } from "@/components/SelectedWork";
+import { SideProjects } from "@/components/SideProjects";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SkipLink } from "@/components/SkipLink";
@@ -22,6 +23,7 @@ export default function HomePage() {
         <Stats />
         <About />
         <SelectedWork />
+        <SideProjects />
         <Career />
         <Stack />
         <Contact />
