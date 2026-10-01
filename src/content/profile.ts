@@ -39,6 +39,13 @@ export type Period = {
   to: number | "now";
 };
 
+export type ProjectScreenshot = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
 export type CaseStudy = {
   title: string;
   client: string;
@@ -46,13 +53,7 @@ export type CaseStudy = {
   summary: string;
   highlights: readonly string[];
   stack: readonly string[];
-};
-
-export type ProjectScreenshot = {
-  src: string;
-  alt: string;
-  width: number;
-  height: number;
+  screenshots?: readonly ProjectScreenshot[];
 };
 
 export type SideProject = {
@@ -168,6 +169,41 @@ const caseStudies: readonly CaseStudy[] = [
     stack: ["React", "TypeScript", "XState", "Zod", "React Query"],
   },
   {
+    title: "Attendance app for an online fitness coach",
+    client: "Fitness coach, pro bono",
+    period: { from: 2026, to: "now" },
+    summary:
+      "A coach runs live workouts in a private Facebook group. Participants sent the workout password on Messenger and she ticked them off by hand, dozens of messages after every session, with no real statistics. I built an app that records attendance on its own. It went live in September 2026.",
+    highlights: [
+      "Checked what Meta's APIs allow before writing any code. Private Messenger has no API and the Groups API is gone, so I kept the familiar password ritual and moved it to a check-in link",
+      "Made check-in a single field on a phone: the browser remembers returning participants, and workouts watched later from the recording can be made up within two months",
+      "Built a mobile-first panel for the coach with a live attendance counter during the workout, one-tap manual check-in, monthly statistics, CSV export and a list of people who stopped coming",
+      "Covered security and GDPR: rate limiting, CSRF protection, signed sessions and automatic deletion of data older than 24 months",
+      "Wrote the API contract and design system first, then delivered with AI coding agents working in parallel on separate parts of the app, backed by automated tests",
+    ],
+    stack: ["React", "TypeScript", "Vite", "React Router", "Hono", "libSQL", "Vitest"],
+    screenshots: [
+      {
+        src: "/work/attendance-check-in.webp",
+        alt: "Phone screen confirming a participant's attendance at today's workout",
+        width: 600,
+        height: 1298,
+      },
+      {
+        src: "/work/attendance-live.webp",
+        alt: "Coach's live screen with today's workout password, a counter of six participants and the list of check-ins",
+        width: 600,
+        height: 1298,
+      },
+      {
+        src: "/work/attendance-people.webp",
+        alt: "List of participants with attendance rates and badges for people who missed several workouts in a row",
+        width: 600,
+        height: 1298,
+      },
+    ],
+  },
+  {
     title: "Business loan application",
     client: "Polish bank",
     period: { from: 2022, to: 2024 },
@@ -199,6 +235,7 @@ export const work = {
   title: "Selected work",
   intro:
     "Client names stay private. The problems, the scale and my part in them are below.",
+  screenshotsLabel: "Screenshots on demo data",
   caseStudies,
 };
 

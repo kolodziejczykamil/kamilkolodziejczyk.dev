@@ -1,5 +1,7 @@
 import { PeriodRange } from "@/components/PeriodRange";
+import { PhoneScreenshots } from "@/components/PhoneScreenshots";
 import { PointerTracker } from "@/components/PointerTracker";
+import { work } from "@/content/profile";
 import type { CaseStudy } from "@/content/profile";
 
 type CaseStudyArticleProps = {
@@ -7,7 +9,7 @@ type CaseStudyArticleProps = {
 };
 
 export function CaseStudyArticle({ caseStudy }: CaseStudyArticleProps) {
-  const { title, client, period, summary, highlights, stack } = caseStudy;
+  const { title, client, period, summary, highlights, stack, screenshots } = caseStudy;
 
   return (
     <PointerTracker className="reveal">
@@ -19,6 +21,7 @@ export function CaseStudyArticle({ caseStudy }: CaseStudyArticleProps) {
           {title}
         </h3>
         <p className="mt-4 max-w-measure">{summary}</p>
+        {screenshots && <PhoneScreenshots screenshots={screenshots} caption={work.screenshotsLabel} />}
         <ul className="mt-5 max-w-measure space-y-2">
           {highlights.map((highlight) => (
             <li key={highlight} className="bullet-dash">
