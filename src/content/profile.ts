@@ -115,7 +115,7 @@ export const siteMeta = {
 };
 
 export const hero = {
-  eyebrow: person.role,
+  eyebrow: `${person.name}, ${person.role}`,
   headline: "I rebuild legacy frontends as fast, mobile-first React apps.",
   intro:
     "Senior Frontend Developer with 8+ years in fintech, banking and logistics. Right now I'm rewriting a payment provider's merchant panel, used by several thousand merchants every day.",

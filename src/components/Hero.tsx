@@ -27,10 +27,14 @@ export function Hero() {
         />
         <Container className="grid items-center gap-16 py-20 md:py-28 lg:grid-cols-12 lg:gap-10 lg:py-32">
           <div className="lg:col-span-7">
-            <p className="hero-rise text-muted" style={riseDelay(0)}>
+            <h1
+              id="hero-title"
+              className="hero-rise font-sans text-base font-normal tracking-normal text-muted"
+              style={riseDelay(0)}
+            >
               {hero.eyebrow}
-            </p>
-            <h1 id="hero-title" className="mt-5 text-hero">
+            </h1>
+            <p className="mt-5 font-display text-hero font-semibold tracking-[-0.02em] text-balance">
               {words.map((word, index) => (
                 <span key={`${word}-${index}`}>
                   <span className="-mb-[0.14em] inline-block overflow-hidden pb-[0.14em] align-bottom">
@@ -43,7 +47,7 @@ export function Hero() {
                   </span>{" "}
                 </span>
               ))}
-            </h1>
+            </p>
             <p className="hero-rise mt-8 max-w-measure text-lg leading-relaxed text-muted" style={riseDelay(1)}>
               {hero.intro}
             </p>
