@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { NavItem } from "@/content/profile";
 
@@ -9,20 +10,32 @@ type NavLinksProps = {
 
 const ACTIVE_BAND_MARGIN = "-45% 0px -50% 0px";
 const BOTTOM_TOLERANCE_PX = 4;
+const HOME_PATH = "/";
+
+function sectionId(href: string): string | null {
+  const [path, hash] = href.split("#");
+  return path === HOME_PATH && hash ? hash : null;
+}
 
 export function NavLinks({ items }: NavLinksProps) {
-  const [activeHref, setActiveHref] = useState<string | null>(null);
+  const pathname = usePathname();
+  const [activeSectionId, setActiveSectionId] = useState<string | null>(null);
 
   useEffect(() => {
+    if (pathname !== HOME_PATH) {
+      return;
+    }
+
     const sections = items
-      .map((item) => document.querySelector<HTMLElement>(item.href))
+      .map((item) => sectionId(item.href))
+      .map((id) => (id ? document.getElementById(id) : null))
       .filter((section) => section !== null);
 
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries.find((entry) => entry.isIntersecting);
         if (visible) {
-          setActiveHref(`#${visible.target.id}`);
+          setActiveSectionId(visible.target.id);
         }
       },
       { rootMargin: ACTIVE_BAND_MARGIN },
@@ -32,7 +45,7 @@ export function NavLinks({ items }: NavLinksProps) {
     const onScroll = () => {
       const isAtBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - BOTTOM_TOLERANCE_PX;
       if (isAtBottom && lastSection) {
-        setActiveHref(`#${lastSection.id}`);
+        setActiveSectionId(lastSection.id);
       }
     };
 
@@ -42,19 +55,27 @@ export function NavLinks({ items }: NavLinksProps) {
       observer.disconnect();
       window.removeEventListener("scroll", onScroll);
     };
-  }, [items]);
+  }, [items, pathname]);
+
+  const isActive = (item: NavItem) => {
+    const id = sectionId(item.href);
+    if (id) {
+      return pathname === HOME_PATH && id === activeSectionId;
+    }
+    return pathname.startsWith(item.href);
+  };
 
   return (
-    <ul className="flex items-center gap-7 text-[0.9375rem]">
+    <ul className="flex items-center gap-6 text-[0.9375rem]">
       {items.map((item) => {
-        const isActive = item.href === activeHref;
+        const active = isActive(item);
         return (
-          <li key={item.href} className={item.showOnMobile ? "" : "hidden sm:block"}>
+          <li key={item.href} className={item.showOnMobile ? "" : "hidden md:block"}>
             <a
               href={item.href}
-              aria-current={isActive ? "location" : undefined}
+              aria-current={active ? "location" : undefined}
               className={`relative py-2 transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:bg-signal after:transition-transform after:duration-300 ${
-                isActive ? "text-paper after:scale-x-100" : "text-muted after:scale-x-0 hover:text-paper"
+                active ? "text-paper after:scale-x-100" : "text-muted after:scale-x-0 hover:text-paper"
               }`}
             >
               {item.label}

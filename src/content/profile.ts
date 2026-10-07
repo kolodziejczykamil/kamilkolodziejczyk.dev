@@ -1,5 +1,6 @@
 import type { SimpleIcon } from "simple-icons";
 import { brandColors } from "@/content/brand";
+import { notesPage } from "@/content/notes";
 import {
   siAntdesign,
   siChartdotjs,
@@ -33,6 +34,7 @@ export const EMAIL = "kontakt@kamilkolodziejczyk.dev";
 export const LINKEDIN_URL = "https://www.linkedin.com/in/kamil-kolodziejczyk";
 export const GITHUB_URL = "https://github.com/kolodziejczykamil";
 export const SOURCE_URL = `${GITHUB_URL}/kamilkolodziejczyk.dev`;
+export const TOP_ID = "top";
 
 export type Period = {
   from: number;
@@ -112,6 +114,7 @@ export const siteMeta = {
   description:
     "Senior Frontend Developer with 8+ years in fintech, banking and logistics. React, TypeScript and Next.js, from legacy rewrites to mobile-first apps.",
   themeColor: brandColors.ink,
+  ogImagePath: "/opengraph-image",
   ogImageAlt: `${person.name}, ${person.role}. I rebuild legacy frontends as fast, mobile-first React apps.`,
 };
 
@@ -441,12 +444,17 @@ export const contact = {
   },
 };
 
+export function homeSectionHref(id: string): string {
+  return `/#${id}`;
+}
+
 export const navItems: readonly NavItem[] = [
-  { label: "Work", href: `#${work.id}`, showOnMobile: false },
-  { label: "Projects", href: `#${projects.id}`, showOnMobile: false },
-  { label: "Career", href: `#${career.id}`, showOnMobile: false },
-  { label: "Stack", href: `#${stack.id}`, showOnMobile: false },
-  { label: "Contact", href: `#${contact.id}`, showOnMobile: true },
+  { label: "Work", href: homeSectionHref(work.id), showOnMobile: false },
+  { label: "Projects", href: homeSectionHref(projects.id), showOnMobile: false },
+  { label: "Career", href: homeSectionHref(career.id), showOnMobile: false },
+  { label: "Stack", href: homeSectionHref(stack.id), showOnMobile: false },
+  { label: notesPage.title, href: notesPage.path, showOnMobile: false },
+  { label: "Contact", href: homeSectionHref(contact.id), showOnMobile: true },
 ];
 
 export const footer = {
@@ -455,13 +463,14 @@ export const footer = {
 };
 
 export const commands: readonly Command[] = [
-  { kind: "section", label: "Go to top", href: "#top" },
-  { kind: "section", label: `Go to ${about.title.toLowerCase()}`, href: `#${about.id}` },
-  { kind: "section", label: `Go to ${work.title.toLowerCase()}`, href: `#${work.id}` },
-  { kind: "section", label: `Go to ${projects.title.toLowerCase()}`, href: `#${projects.id}` },
-  { kind: "section", label: `Go to ${career.title.toLowerCase()}`, href: `#${career.id}` },
-  { kind: "section", label: `Go to ${stack.title.toLowerCase()}`, href: `#${stack.id}` },
-  { kind: "section", label: `Go to ${contact.title.toLowerCase()}`, href: `#${contact.id}` },
+  { kind: "section", label: "Go to top", href: homeSectionHref(TOP_ID) },
+  { kind: "section", label: `Go to ${about.title.toLowerCase()}`, href: homeSectionHref(about.id) },
+  { kind: "section", label: `Go to ${work.title.toLowerCase()}`, href: homeSectionHref(work.id) },
+  { kind: "section", label: `Go to ${projects.title.toLowerCase()}`, href: homeSectionHref(projects.id) },
+  { kind: "section", label: `Go to ${career.title.toLowerCase()}`, href: homeSectionHref(career.id) },
+  { kind: "section", label: `Go to ${stack.title.toLowerCase()}`, href: homeSectionHref(stack.id) },
+  { kind: "section", label: `Go to ${contact.title.toLowerCase()}`, href: homeSectionHref(contact.id) },
+  { kind: "section", label: "Read notes", href: notesPage.path },
   { kind: "copy", label: "Copy email address", value: EMAIL, confirmation: "Email copied" },
   { kind: "link", label: "Send an email", href: `mailto:${EMAIL}` },
   { kind: "link", label: "Open LinkedIn profile", href: LINKEDIN_URL },

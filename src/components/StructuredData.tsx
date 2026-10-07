@@ -7,13 +7,10 @@ import {
   siteMeta,
   stack,
 } from "@/content/profile";
+import { toJsonLd } from "@/lib/json-ld";
 
 const PERSON_ID = `${SITE_URL}/#person`;
 const WEBSITE_ID = `${SITE_URL}/#website`;
-
-function toJsonLd(value: object): string {
-  return JSON.stringify(value).replace(/</g, "\\u003c");
-}
 
 export function StructuredData() {
   const graph = {

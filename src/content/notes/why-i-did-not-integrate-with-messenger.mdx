@@ -1,0 +1,40 @@
+A fitness coach I know runs live workouts in a private Facebook group. During each workout she says a password. Participants send it to her on Messenger, and after the session she goes through the messages and ticks off who was there.
+
+With dozens of messages after every workout, this takes time and mistakes are easy. And there are no statistics: who came on which day, who stopped coming. The request sounded simple: can an app read those messages for me?
+
+## What Meta's APIs allow
+
+Before writing any code, I checked the options.
+
+- **Reading her private Messenger.** Meta has no API for personal accounts. Bots and scraping break the terms of service and can get the account blocked. Not an option for someone whose business runs on that account.
+- **Reading comments under the live video in the group.** The Groups API that could do this was shut down by Meta in 2024.
+- **Messenger Platform for a Facebook Page.** Technically possible: a webhook receives every message sent to a Page. But participants would have to write to a Page instead of to her, and the app would need Meta's App Review for messaging permissions and a verified business. A lot of paperwork for a small coach, with a real chance of rejection.
+- **Her own check-in link.** No dependency on Meta at all.
+
+## Keep the ritual, change the channel
+
+The password was never the problem. People were used to it, and it proves they watched the workout. The problem was the channel.
+
+So the coach still says "today's password is MALINA" during the live, but participants type it on a page linked in the group instead of sending it on Messenger. The first time, a participant enters her name and a phone number or email. After that the browser remembers her, and checking in is one field and one button. People who watch the recording later can still check in, and the app marks those as made-up workouts.
+
+For the transition there is a plan B: if someone still sends the password on Messenger, the coach finds her in the app and ticks her off with one tap.
+
+## What the coach gets
+
+- A live screen during the workout, with the password in large letters and a counter of people who have checked in.
+- Monthly statistics: who came on which day, attendance per person and a CSV export for Excel.
+- A list of people who missed several workouts in a row, so she can write to them before they drop out.
+
+The app went live in September 2026.
+
+## What I took from it
+
+**Sometimes the best integration is no integration.** Reading the documentation first ruled out the path that looked obvious and would have cost the most, before a single line of code depended on it.
+
+**Keep the habit users already have.** Nobody had to learn anything new. They type the same password, just in a different place.
+
+**Design for the real context.** A phone, one hand, during or right after a workout. Large fields, one action per screen, and the coach's panel works from the home screen of her phone.
+
+The Messenger Platform option is not gone for good. If the coach ever sets up a Facebook Page, a webhook that recognizes the password in a message could be a second stage. It just did not have to be the first one.
+
+I built the app with AI coding agents working in parallel on separate parts, starting from a shared API contract. That is a topic for another note.

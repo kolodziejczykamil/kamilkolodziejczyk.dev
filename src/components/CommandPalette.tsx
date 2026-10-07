@@ -72,7 +72,7 @@ export function CommandPalette() {
     }
     close();
     if (command.kind === "section") {
-      window.location.hash = command.href;
+      window.location.href = command.href;
       return;
     }
     if (externalLinkProps(command.href).target) {

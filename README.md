@@ -11,6 +11,7 @@ Personal website of Kamil Kołodziejczyk, Senior Frontend Developer. A single st
 - Cloudflare Workers: static assets, `send_email` binding and Turnstile
 - Self-hosted fonts via Fontsource: Bricolage Grotesque and IBM Plex Sans
 - Technology logos from Simple Icons, rendered at build time
+- MDX for notes
 
 ## Development
 
@@ -62,3 +63,5 @@ npm run deploy
 ## Content
 
 All copy, links and data live in `src/content/profile.ts`. Components only render it.
+
+Notes are MDX files in `src/content/notes/`. To publish one, add the file and register it in `src/content/notes.ts` with its title, description, date and reading time. It then appears on `/notes`, on the home page, in the sitemap and gets its own page at `/notes/<slug>`.

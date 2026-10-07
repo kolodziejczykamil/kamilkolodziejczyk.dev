@@ -1,13 +1,13 @@
 import { CommandPalette } from "@/components/CommandPalette";
 import { Container } from "@/components/Container";
 import { NavLinks } from "@/components/NavLinks";
-import { mainNavLabel, navItems, person } from "@/content/profile";
+import { homeSectionHref, mainNavLabel, navItems, person, TOP_ID } from "@/content/profile";
 
 export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-line bg-ink/80 backdrop-blur-md">
       <Container className="flex h-header items-center justify-between gap-6">
-        <a href="#top" className="font-display text-lg font-semibold tracking-tight">
+        <a href={homeSectionHref(TOP_ID)} className="font-display text-lg font-semibold tracking-tight">
           {person.name}
         </a>
         <div className="flex items-center gap-6">
