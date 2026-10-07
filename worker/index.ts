@@ -7,6 +7,7 @@ const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/sit
 const SENDER_NAME = "kamilkolodziejczyk.dev";
 const WWW_PREFIX = "www.";
 const PERMANENT_REDIRECT = 301;
+const LOCAL_HOSTNAMES = new Set(["localhost", "127.0.0.1"]);
 const MAX_BODY_BYTES = 16_384;
 const DAILY_COUNTER_TTL_SECONDS = 2 * 24 * 60 * 60;
 
@@ -122,12 +123,27 @@ async function handleContact(request: Request, env: Env): Promise<Response> {
   return json({ ok: true }, 200);
 }
 
+function canonicalRedirect(url: URL): string | null {
+  if (LOCAL_HOSTNAMES.has(url.hostname)) {
+    return null;
+  }
+  const isWww = url.hostname.startsWith(WWW_PREFIX);
+  const isInsecure = url.protocol === "http:";
+  if (!isWww && !isInsecure) {
+    return null;
+  }
+  const canonical = new URL(url);
+  canonical.protocol = "https:";
+  canonical.hostname = isWww ? url.hostname.slice(WWW_PREFIX.length) : url.hostname;
+  return canonical.toString();
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (url.hostname.startsWith(WWW_PREFIX)) {
-      url.hostname = url.hostname.slice(WWW_PREFIX.length);
-      return Response.redirect(url.toString(), PERMANENT_REDIRECT);
+    const redirectTo = canonicalRedirect(url);
+    if (redirectTo) {
+      return Response.redirect(redirectTo, PERMANENT_REDIRECT);
     }
     if (url.pathname === CONTACT_PATH) {
       return handleContact(request, env);
