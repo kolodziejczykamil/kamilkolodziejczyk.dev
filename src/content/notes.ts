@@ -11,6 +11,15 @@ export type Note = {
 
 export const notes: readonly Note[] = [
   {
+    slug: "parallel-ai-agents-need-a-contract-first",
+    title: "Parallel AI agents need a contract first",
+    description:
+      "I built the attendance app with an orchestrator and four AI agents working at the same time. What made it work was everything prepared before any agent wrote code.",
+    publishedAt: "2026-10-11",
+    readingMinutes: 3,
+    load: () => import("@/content/notes/parallel-ai-agents-need-a-contract-first.mdx"),
+  },
+  {
     slug: "why-i-did-not-integrate-with-messenger",
     title: "Why I didn't integrate with Messenger",
     description:

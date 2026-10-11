@@ -1,0 +1,44 @@
+In the [previous note](/notes/why-i-did-not-integrate-with-messenger) I wrote about why the attendance app for a fitness coach skips Messenger. This one is about how it was built: with Claude, as one orchestrator and four agents working on separate parts of the app at the same time.
+
+The interesting part is not that agents wrote code. It is what had to exist before they started.
+
+## The foundation came first
+
+The first commit contains no features. It contains:
+
+- **A plan.** The problem, the options that were rejected, business rules down to how passwords are compared and how phone numbers are normalized, and the split of work between agents.
+- **An API contract.** 28 TypeScript types in one shared file, the only source of truth for requests and responses. The backend and the frontend both import it.
+- **A design system.** Colour tokens matched to the coach's website, buttons, cards, form fields, a bottom sheet and a toast, ready to use.
+- **Empty screens with an owner.** Every page already existed as a stub with one line pointing to the plan: implement this screen, see the plan.
+
+## One rule: every file has one owner
+
+There were four agents: the backend, the public check-in screen, the coach's training panel, and participants with statistics. Each one owned a set of files and was not allowed to edit anything outside it. If an agent needed a change in a shared file, it described the change in its final report instead of making it.
+
+This removes the problem that breaks parallel work: two agents editing the same file with different assumptions. There was nothing to merge. Conflicts came back as notes in the reports, where they could be decided on purpose.
+
+## What the first pass produced
+
+The commit with the first full version, with the backend, check-in, training panel, participants and statistics, landed 16 minutes after the foundation commit: 53 files and about 8,900 lines. The backend came with tests that call the API against an in-memory database.
+
+## What a first pass does not give you
+
+The very next commit removed comments from 59 files and moved the list of endpoints into a single API document. After that came the parts that turn a working version into something a real person can rely on:
+
+- deployment on Vercel with a cloud SQLite database,
+- a security and GDPR pass: CSRF protection, rate limits, security headers and automatic deletion of old data,
+- accounts with a password change,
+- making up missed workouts from the recording,
+- a personal panel where each participant sees her own attendance.
+
+Agents are fast at filling in a well-defined shape. Deciding the shape, the rules and what "done" means is still the job.
+
+## What I would keep
+
+**Contract first.** Shared types are the cheapest way to make four agents agree without talking to each other.
+
+**Ownership instead of merging.** Split the work by files, not by tasks that touch the same files.
+
+**Business rules in writing.** Every rule in the plan is a question an agent does not have to guess.
+
+**Stubs as a map.** An empty screen with an owner tells an agent exactly where to work and where to stop.
