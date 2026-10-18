@@ -15,6 +15,11 @@ const components: MDXComponents = {
   code: ({ children }) => (
     <code className="rounded bg-ink-raised px-1.5 py-0.5 text-[0.9em] text-signal">{children}</code>
   ),
+  pre: ({ children }) => (
+    <pre className="mt-6 overflow-x-auto rounded-lg border border-line bg-ink-raised p-4 text-sm leading-relaxed text-paper [&>code]:bg-transparent [&>code]:p-0 [&>code]:text-[1em] [&>code]:text-paper">
+      {children}
+    </pre>
+  ),
   hr: () => <hr className="my-10 border-line" />,
 };
 

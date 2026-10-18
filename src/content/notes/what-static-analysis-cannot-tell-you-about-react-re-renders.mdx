@@ -1,0 +1,54 @@
+[Re-render lab](https://re-render-lab.vercel.app) is a small tool I built: you paste a React component, describe a scenario (a prop changes, state updates, the parent re-renders, an effect runs) and get a timeline of renders with suggestions. It never runs React. It reads the code and applies rules.
+
+Building it is a good way to see exactly where reading code stops being enough.
+
+## What the code can tell you
+
+The analyzer parses the component with Babel and walks the syntax tree. From the source alone it can reliably find:
+
+- whether the component is wrapped in `React.memo`,
+- how many `useState` hooks it has and what they are called,
+- whether each `useEffect` has a dependency array and what is in it,
+- inline arrow functions, objects and arrays passed in JSX.
+
+These are facts. They are in the text of the file, so a parser finds them every time.
+
+## What only the running app knows
+
+The problems start with the questions that matter for performance.
+
+**Did the props actually change?** `React.memo` skips a render when every prop is shallowly equal to the previous one. Whether `user` is the same object as last time depends on the parent, not on this component. The simulator cannot know it, so it has to assume: a prop change always re-renders, and a memoized component skips a parent re-render because its props are treated as unchanged. Both are reasonable defaults, and both can be wrong in a real app.
+
+**How long does a render take?** The timeline shows durations, but they are deterministic placeholders that keep events in order, not measurements. Real timings come from the React DevTools Profiler, on a real device, with real data.
+
+**What else triggers a render?** The scenarios cover props, state, parent renders and effects. Context updates are not modelled at all, and in many apps they are the main source of surprise renders.
+
+## The rule that needs the most nuance
+
+The tool suggests `useCallback` whenever it sees an inline arrow function in JSX. Taken literally, that is one of the most common React performance myths.
+
+```tsx
+<button onClick={() => setOpen(true)}>Open</button>
+```
+
+A new function on every render changes nothing here: `button` is a DOM element and does not compare props. The new reference only matters when it reaches something that compares it:
+
+```tsx
+const Row = memo(function Row({ onSelect }: RowProps) { ... });
+
+<Row onSelect={() => select(item.id)} />
+```
+
+Now `memo` sees a different `onSelect` on every render and re-renders `Row` anyway, so `useCallback` actually helps. The same applies to functions used in a dependency array. A better rule would flag inline functions only when they are passed to a memoized child or used as a dependency.
+
+The same nuance applies to `React.memo` itself. It adds a comparison on every render, so it pays off for components that render often with the same props, not for every component by default.
+
+## What I take from it
+
+**Static analysis finds patterns, not problems.** It can tell you that an inline object exists. It cannot tell you whether it costs anything.
+
+**Make assumptions visible.** A simulated number that looks like a measurement is worse than no number. Label it.
+
+**Measure before you memoize.** Open the Profiler, find the component that actually renders too often, and fix that one. The patterns a tool flags are a list of places to look, not a list of things to change.
+
+The code is on [GitHub](https://github.com/kolodziejczykamil/re-render-lab).

@@ -11,6 +11,15 @@ export type Note = {
 
 export const notes: readonly Note[] = [
   {
+    slug: "what-static-analysis-cannot-tell-you-about-react-re-renders",
+    title: "What static analysis can't tell you about React re-renders",
+    description:
+      "Building a tool that predicts React re-renders from source code shows exactly where reading code stops and the running app has to answer. Including the useCallback rule that needs the most nuance.",
+    publishedAt: "2026-10-18",
+    readingMinutes: 4,
+    load: () => import("@/content/notes/what-static-analysis-cannot-tell-you-about-react-re-renders.mdx"),
+  },
+  {
     slug: "parallel-ai-agents-need-a-contract-first",
     title: "Parallel AI agents need a contract first",
     description:
